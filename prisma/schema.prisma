@@ -1,0 +1,190 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  CUSTOMER
+  ADMIN
+}
+
+enum ProductStatus {
+  ACTIVE
+  DRAFT
+  ARCHIVED
+}
+
+enum OrderStatus {
+  RECEIVED
+  IN_TRANSIT
+  ARRIVED_AT_RELAY
+  PICKED_UP
+  CANCELLED
+}
+
+enum PaymentMethod {
+  AIRTEL_MONEY
+  MOOV_MONEY
+  CARD
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum RelayPointStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum CommissionStatus {
+  PENDING
+  PAID
+}
+
+model User {
+  id                  String      @id @default(cuid())
+  phone               String      @unique
+  email               String?     @unique
+  passwordHash        String
+  fullName            String
+  role                UserRole    @default(CUSTOMER)
+  favoriteRelayPointId String?
+  favoriteRelayPoint  RelayPoint? @relation(fields: [favoriteRelayPointId], references: [id])
+  orders              Order[]
+  createdAt           DateTime    @default(now())
+
+  @@map("users")
+}
+
+model Category {
+  id       String     @id @default(cuid())
+  name     String
+  slug     String     @unique
+  imageUrl String?
+  parentId String?
+  parent   Category?  @relation("CategoryToCategory", fields: [parentId], references: [id])
+  children Category[] @relation("CategoryToCategory")
+  products Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id                   String        @id @default(cuid())
+  name                 String
+  slug                 String        @unique
+  description          String
+  images               String[]
+  priceTotalXaf        Int
+  availabilityDaysMin  Int
+  availabilityDaysMax  Int
+  status               ProductStatus @default(ACTIVE)
+  categoryId           String
+  category             Category      @relation(fields: [categoryId], references: [id])
+  orderItems           OrderItem[]
+  createdAt            DateTime      @default(now())
+
+  @@map("products")
+}
+
+model RelayPoint {
+  id              String            @id @default(cuid())
+  name            String
+  neighborhood    String
+  address         String
+  city            String            @default("Libreville")
+  openingHours    String
+  phone           String
+  lat             Float?
+  lng             Float?
+  status          RelayPointStatus  @default(ACTIVE)
+  orders          Order[]
+  commissions     RelayCommission[]
+  favoritedByUsers User[]
+
+  @@map("relay_points")
+}
+
+model Order {
+  id                   String              @id @default(cuid())
+  orderNumber          String              @unique
+  userId               String
+  user                 User                @relation(fields: [userId], references: [id])
+  relayPointId         String
+  relayPoint           RelayPoint          @relation(fields: [relayPointId], references: [id])
+  status               OrderStatus         @default(RECEIVED)
+  subtotalXaf          Int
+  totalXaf             Int
+  paymentMethod        PaymentMethod
+  paymentStatus        PaymentStatus       @default(PENDING)
+  pickupCode           String              @unique
+  estimatedArrivalDate DateTime?
+  items                OrderItem[]
+  payments             Payment[]
+  statusHistory        OrderStatusHistory[]
+  commission           RelayCommission?
+  createdAt            DateTime            @default(now())
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id                  String  @id @default(cuid())
+  orderId             String
+  order               Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId           String
+  product             Product @relation(fields: [productId], references: [id])
+  productNameSnapshot String
+  unitPriceXafSnapshot Int
+  quantity            Int
+  subtotalXaf         Int
+
+  @@map("order_items")
+}
+
+model Payment {
+  id                    String        @id @default(cuid())
+  orderId               String
+  order                 Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  provider              PaymentMethod
+  providerTransactionId String?
+  amountXaf             Int
+  status                PaymentStatus @default(PENDING)
+  rawResponse           Json?
+  createdAt             DateTime      @default(now())
+
+  @@map("payments")
+}
+
+model OrderStatusHistory {
+  id        String      @id @default(cuid())
+  orderId   String
+  order     Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  status    OrderStatus
+  changedAt DateTime    @default(now())
+  changedBy String?
+
+  @@map("order_status_history")
+}
+
+model RelayCommission {
+  id           String            @id @default(cuid())
+  relayPointId String
+  relayPoint   RelayPoint        @relation(fields: [relayPointId], references: [id])
+  orderId      String            @unique
+  order        Order             @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  amountXaf    Int
+  status       CommissionStatus  @default(PENDING)
+  depositedAt  DateTime?
+  pickedUpAt   DateTime?
+
+  @@map("relay_commissions")
+}
