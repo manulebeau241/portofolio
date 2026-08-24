@@ -14,26 +14,10 @@ const palette = [
 ];
 
 const items = [
-  ["mode", "Mode & Vêtements"],
+  ["electromenager", "Électroménager"],
+  ["tech", "Tech"],
   ["accessoires", "Accessoires"],
-  ["electronique", "Petit électronique"],
-  ["cosmetique", "Cosmétique & Beauté"],
-  ["sneakers1", "Sneakers urbaines"],
-  ["sneakers2", "Sneakers urbaines"],
-  ["sac1", "Sac à main"],
-  ["sac2", "Sac à main"],
-  ["montre1", "Montre connectée"],
-  ["montre2", "Montre connectée"],
-  ["ecouteurs1", "Écouteurs sans fil"],
-  ["ecouteurs2", "Écouteurs sans fil"],
-  ["lunettes1", "Lunettes de soleil"],
-  ["lunettes2", "Lunettes de soleil"],
-  ["ceinture1", "Ceinture cuir"],
-  ["ceinture2", "Ceinture cuir"],
-  ["cosmetique1", "Coffret soins visage"],
-  ["cosmetique2", "Coffret soins visage"],
-  ["lisseur1", "Lisseur cheveux"],
-  ["lisseur2", "Lisseur cheveux"],
+  ["meubles", "Meubles"],
 ];
 
 items.forEach(([seed], i) => {

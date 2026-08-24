@@ -44,6 +44,9 @@ export function Header() {
           <Link href="/points-relais" className="hover:text-gold-300">
             Points relais
           </Link>
+          <Link href="/suivi" className="hover:text-gold-300">
+            Suivre ma commande
+          </Link>
           <Link href="/faq" className="hover:text-gold-300">
             FAQ
           </Link>

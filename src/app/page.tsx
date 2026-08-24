@@ -38,6 +38,9 @@ export default async function HomePage() {
               Points relais
             </ButtonLink>
           </div>
+          <Link href="/suivi" className="mt-3 inline-block text-sm font-medium text-gold-300 underline underline-offset-2 hover:text-gold-200">
+            Suivre une commande existante →
+          </Link>
         </div>
       </section>
 

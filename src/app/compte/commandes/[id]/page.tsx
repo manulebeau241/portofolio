@@ -1,13 +1,9 @@
 import { notFound, redirect } from "next/navigation";
-import { Check } from "lucide-react";
 import { getCurrentUser } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
-import { cn, formatXaf } from "@/lib/utils";
-import {
-  ORDER_STATUS_LABELS,
-  ORDER_STATUS_STEPS,
-  OrderStatusBadge,
-} from "@/components/ui/OrderStatusBadge";
+import { formatXaf } from "@/lib/utils";
+import { OrderStatusBadge } from "@/components/ui/OrderStatusBadge";
+import { OrderTimeline } from "@/components/order/OrderTimeline";
 
 export default async function OrderDetailPage({
   params,
@@ -25,9 +21,6 @@ export default async function OrderDetailPage({
 
   if (!order || order.userId !== user.id) notFound();
 
-  const isCancelled = order.status === "CANCELLED";
-  const currentStepIndex = ORDER_STATUS_STEPS.indexOf(order.status);
-
   return (
     <div className="mx-auto max-w-2xl px-4 py-6 md:px-6">
       <div className="mb-4 flex items-center justify-between">
@@ -35,33 +28,9 @@ export default async function OrderDetailPage({
         <OrderStatusBadge status={order.status} />
       </div>
 
-      {!isCancelled && (
-        <ol className="mb-6 flex flex-col gap-0">
-          {ORDER_STATUS_STEPS.map((step, i) => {
-            const done = i <= currentStepIndex;
-            return (
-              <li key={step} className="flex gap-3">
-                <div className="flex flex-col items-center">
-                  <span
-                    className={cn(
-                      "flex h-6 w-6 shrink-0 items-center justify-center rounded-full",
-                      done ? "bg-forest-700 text-sand-50" : "bg-forest-100 text-forest-400"
-                    )}
-                  >
-                    {done && <Check size={13} />}
-                  </span>
-                  {i < ORDER_STATUS_STEPS.length - 1 && (
-                    <span className={cn("h-8 w-px", done ? "bg-forest-700" : "bg-forest-100")} />
-                  )}
-                </div>
-                <span className={cn("pb-6 text-sm", done ? "font-semibold text-forest-950" : "text-forest-400")}>
-                  {ORDER_STATUS_LABELS[step]}
-                </span>
-              </li>
-            );
-          })}
-        </ol>
-      )}
+      <div className="mb-6">
+        <OrderTimeline status={order.status} />
+      </div>
 
       {order.status !== "PICKED_UP" && (
         <div className="mb-5 rounded-card border-2 border-dashed border-gold-400 bg-gold-50 p-4 text-center">
