@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+:root {
+  --background: #faf8f3;
+  --foreground: #10241c;
+
+  /* Forest greens — identité Okoumia */
+  --color-forest-50: #eef5f1;
+  --color-forest-100: #d6e9de;
+  --color-forest-200: #aed3bd;
+  --color-forest-300: #7fb797;
+  --color-forest-400: #4c9770;
+  --color-forest-500: #2f7a56;
+  --color-forest-600: #206144;
+  --color-forest-700: #184d37;
+  --color-forest-800: #123c2b;
+  --color-forest-900: #0c2c20;
+  --color-forest-950: #071c14;
+
+  /* Ocre / doré — accent premium */
+  --color-gold-50: #fbf4e6;
+  --color-gold-100: #f5e4c1;
+  --color-gold-200: #ecce8f;
+  --color-gold-300: #e2b660;
+  --color-gold-400: #d7a94b;
+  --color-gold-500: #c9933a;
+  --color-gold-600: #ab7830;
+  --color-gold-700: #855d28;
+  --color-gold-800: #664722;
+  --color-gold-900: #4a331b;
+
+  --color-sand-50: #faf8f3;
+  --color-sand-100: #f3efe3;
+  --color-sand-200: #e8e1cd;
+
+  --radius-card: 1rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-forest-50: var(--color-forest-50);
+  --color-forest-100: var(--color-forest-100);
+  --color-forest-200: var(--color-forest-200);
+  --color-forest-300: var(--color-forest-300);
+  --color-forest-400: var(--color-forest-400);
+  --color-forest-500: var(--color-forest-500);
+  --color-forest-600: var(--color-forest-600);
+  --color-forest-700: var(--color-forest-700);
+  --color-forest-800: var(--color-forest-800);
+  --color-forest-900: var(--color-forest-900);
+  --color-forest-950: var(--color-forest-950);
+
+  --color-gold-50: var(--color-gold-50);
+  --color-gold-100: var(--color-gold-100);
+  --color-gold-200: var(--color-gold-200);
+  --color-gold-300: var(--color-gold-300);
+  --color-gold-400: var(--color-gold-400);
+  --color-gold-500: var(--color-gold-500);
+  --color-gold-600: var(--color-gold-600);
+  --color-gold-700: var(--color-gold-700);
+  --color-gold-800: var(--color-gold-800);
+  --color-gold-900: var(--color-gold-900);
+
+  --color-sand-50: var(--color-sand-50);
+  --color-sand-100: var(--color-sand-100);
+  --color-sand-200: var(--color-sand-200);
+
+  --font-sans: var(--font-jakarta);
+}
+
+body {
+  background: var(--color-sand-50);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+.input {
+  height: 2.5rem;
+  border-radius: 0.65rem;
+  border: 1px solid var(--color-forest-200);
+  padding: 0 0.75rem;
+  font-size: 0.875rem;
+  background: white;
+}
+.input:focus {
+  outline: none;
+  border-color: var(--color-forest-500);
+}
+textarea.input {
+  height: auto;
+  padding: 0.6rem 0.75rem;
+}
+
+/* Cache la scrollbar horizontale des rails de catégories/produits sans casser le scroll */
+.scroll-rail {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scroll-rail::-webkit-scrollbar {
+  display: none;
+}
